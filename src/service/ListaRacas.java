@@ -11,7 +11,6 @@ public class ListaRacas {
 
         List<String> breedList = new ArrayList<>();
         DogApi service = new DogApi();
-
         Map<String, List<String>> response = service.allBreeds();
 
         for (Map.Entry<String, List<String>> entry : response.entrySet()) {

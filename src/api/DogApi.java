@@ -17,6 +17,7 @@ public class DogApi {
 
     public DogApi() {
         this.httpClient = HttpClient.newHttpClient();
+        //construtor
     }
 
     /**
@@ -27,7 +28,7 @@ public class DogApi {
      */
     public String getImage(String breed) {
         try {
-            String url = String.format(BASE_URL, breed.toLowerCase());
+            String url = String.format(BASE_URL, breed.toLowerCase()); //recebe o nome do breed (raça) e devolve a imagem de acordo
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .GET()

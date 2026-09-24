@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Canil — Arquivo de Raças</title>
+<meta name="description" content="Arquivo aberto de raças caninas. Selecione uma raça e veja um exemplar.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Inter:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="rail">
+    <div class="mark">Canil</div>
+    <p class="lede">Arquivo aberto de raças caninas. Selecione um nome para ver um exemplar.</p>
+
+    <label class="field" for="q">
+      <span class="field-lbl">Filtrar</span>
+      <input id="q" type="search" placeholder="husky, akita, beagle" autocomplete="off" spellcheck="false">
+    </label>
+
+    <nav class="list" id="list" aria-label="Raças"></nav>
+  </aside>
+
+  <main class="stage">
+    <div class="stage-top">
+      <span class="kicker">Raça selecionada</span>
+      <span class="counter"><span id="idx">00</span><i>/</i><span id="total">000</span></span>
+    </div>
+
+    <h1 class="title" id="title">—</h1>
+
+    <figure class="frame" id="frame">
+      <div class="frame-empty" id="empty">Selecione uma raça</div>
+      <img id="photo" alt="" decoding="async">
+    </figure>
+
+    <footer class="stage-foot">
+      <span class="taxo" id="taxo">—</span>
+      <button class="btn" id="shuffle" type="button" disabled>Outra imagem</button>
+    </footer>
+  </main>
+
+</div>
+
+<script src="script.js" defer></script>
+
+</body>
+</html>

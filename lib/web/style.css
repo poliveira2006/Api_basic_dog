@@ -86,7 +86,7 @@ body::after {
   pointer-events: none;
   z-index: 999;
   opacity: var(--noise-op);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-image: url(https://media.istockphoto.com/id/1226915483/es/vector/patr%C3%B3n-de-beb%C3%A9-de-los-ni%C3%B1os-del-perro-dibujado-a-mano-en-el-tel%C3%B3n-de-fondo-blanco.jpg?s=170667a&w=0&k=20&c=wVryRRi3-fqxfPRtR0g1mDu-WwIC6FquFI3tdaLtGQY=);
 }
 
 button, input { font: inherit; color: inherit; }

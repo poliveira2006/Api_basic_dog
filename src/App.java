@@ -17,33 +17,28 @@ import java.util.stream.Collectors;
 
 public class App {
 
-    private static final int PORT = 8080;
-    private static final Path WEB_ROOT =
-            Paths.get(System.getProperty("user.dir"), "lib", "web").toAbsolutePath().normalize();
-
+    private static final int PORT = 8080; //porta do servidor
+    private static final Path WEB_ROOT = Paths.get(System.getProperty("user.dir"), "lib", "web").toAbsolutePath().normalize();
+    //caminho até o front-end
     private static final DogApi API = new DogApi();
-
+    //instancia API
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(PORT), 0);
-
-        server.createContext("/api/breeds", App::handleBreeds);
-        server.createContext("/api/image",  App::handleImage);
-        server.createContext("/",            App::handleStatic);
-
-        server.setExecutor(null);
-        server.start();
-
+        //cria o servidor Http, com a porta padrão.
+        server.createContext("/api/breeds", App::handleBreeds);//cria a rota exclusiva para retornar as raças
+        server.createContext("/api/image",  App::handleImage); //rota exclusiva para as imagens das raças de cachorro
+        server.createContext("/",            App::handleStatic); // rota para os arquivos staticos, como html, css e js
+        server.setExecutor(null); //executor padrão
+        server.start(); //start
         System.out.println("Servidor em http://localhost:" + PORT);
         System.out.println("Servindo arquivos de " + WEB_ROOT);
     }
 
-    /* ---------- API ---------- */
-
-    /** GET /api/breeds → ["husky", "afghan hound", ...] */
     private static void handleBreeds(HttpExchange ex) throws IOException {
         if (!"GET".equalsIgnoreCase(ex.getRequestMethod())) {
             send(ex, 405, "text/plain", "Método não permitido");
             return;
+            //aceita apenas requisições do tipo GET
         }
 
         try {
@@ -79,7 +74,7 @@ public class App {
         }
     }
 
-    /** GET /api/image?breed=husky[&sub=siberian] → { "url": "..." } */
+
     private static void handleImage(HttpExchange ex) throws IOException {
         if (!"GET".equalsIgnoreCase(ex.getRequestMethod())) {
             send(ex, 405, "text/plain", "Método não permitido");
@@ -109,8 +104,6 @@ public class App {
                     "{\"error\":\"falha ao buscar imagem\"}");
         }
     }
-
-    /* ---------- estáticos ---------- */
 
     private static void handleStatic(HttpExchange ex) throws IOException {
         String rawPath = ex.getRequestURI().getPath();
@@ -151,8 +144,6 @@ public class App {
         if (n.endsWith(".ico"))  return "image/x-icon";
         return "application/octet-stream";
     }
-
-    /* ---------- utilitários ---------- */
 
     private static void send(HttpExchange ex, int status, String contentType, String body)
             throws IOException {

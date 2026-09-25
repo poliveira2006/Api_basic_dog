@@ -43,14 +43,16 @@ public class App {
 
         try {
             Map<String, List<String>> raw = API.allBreeds();
-
+            //busca todas as raças
             StringBuilder json = new StringBuilder("[");
             boolean first = true;
+            //monta o json 
 
             for (Map.Entry<String, List<String>> entry : raw.entrySet()) {
+                //for each para percorrer o map e pegar os valores
                 String breed = entry.getKey();
                 List<String> subs = entry.getValue();
-
+                    //raça sem sub-raça, coloca só o nome.
                 if (subs == null || subs.isEmpty()) {
                     if (!first) json.append(',');
                     json.append('"').append(escape(breed)).append('"');
@@ -61,13 +63,13 @@ public class App {
                         json.append('"').append(escape(sub)).append(' ')
                             .append(escape(breed)).append('"');
                         first = false;
+                          // raça com sub-raça: combina "sub raça"
                     }
                 }
             }
             json.append(']');
-
             send(ex, 200, "application/json; charset=utf-8", json.toString());
-
+                    //devolve o json
         } catch (Exception e) {
             send(ex, 500, "application/json; charset=utf-8",
                     "{\"error\":\"falha ao listar raças\"}");
@@ -76,14 +78,15 @@ public class App {
 
 
     private static void handleImage(HttpExchange ex) throws IOException {
+        //aceita apenas get
         if (!"GET".equalsIgnoreCase(ex.getRequestMethod())) {
             send(ex, 405, "text/plain", "Método não permitido");
             return;
         }
-
         Map<String, String> query = parseQuery(ex.getRequestURI().getRawQuery());
         String breed = query.get("breed");
         String sub   = query.get("sub");
+        //le os parametros da URL
 
         if (breed == null || breed.isBlank()) {
             send(ex, 400, "application/json; charset=utf-8",
@@ -114,7 +117,7 @@ public class App {
 
         Path target = WEB_ROOT.resolve(rawPath.substring(1)).normalize();
 
-        // impede path traversal (../)
+        // impede path traversal 
         if (!target.startsWith(WEB_ROOT) || !Files.isRegularFile(target)) {
             send(ex, 404, "text/plain; charset=utf-8", "404");
             return;
@@ -130,7 +133,7 @@ public class App {
             out.write(bytes);
         }
     }
-
+ // devolve o mime type (Strinh que identifica o formato) pela extensão do arquivo
     private static String mimeOf(String name) {
         String n = name.toLowerCase();
         if (n.endsWith(".html")) return "text/html; charset=utf-8";
@@ -144,9 +147,9 @@ public class App {
         if (n.endsWith(".ico"))  return "image/x-icon";
         return "application/octet-stream";
     }
-
+    //send response HTTP 
     private static void send(HttpExchange ex, int status, String contentType, String body)
-            throws IOException {
+        throws IOException {
         byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
         ex.getResponseHeaders().set("Content-Type", contentType);
         ex.sendResponseHeaders(status, bytes.length);
@@ -169,7 +172,7 @@ public class App {
         }
         return map;
     }
-
+ //decodifica caracteres especiais
     private static String decode(String s) {
         try {
             return java.net.URLDecoder.decode(s, StandardCharsets.UTF_8);
@@ -177,7 +180,7 @@ public class App {
             return s;
         }
     }
-
+//escapa caracteres especiais para o json
     private static String escape(String s) {
         if (s == null) return "";
         StringBuilder sb = new StringBuilder(s.length() + 8);

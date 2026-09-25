@@ -14,23 +14,23 @@ import java.util.regex.Pattern;
 
 public class DogApi {
 
-    // URL base para buscar uma imagem aleatória de uma raça. O %s é o espaço onde o nome da raça será inserido.
+    //buscar  imagem aleatória de uma raça.
     private static final String BASE_URL_IMAGE = "https://dog.ceo/api/breed/%s/images/random";
 
-    // URL que devolve a lista completa de todas as raças e sub-raças disponíveis.
+    // devolve a lista completa de todas as raças e sub-raças disponíveis.
     private static final String BASE_URL_BREEDS = "https://dog.ceo/api/breeds/list/all";
 
     // Cliente HTTP criado uma única vez para reaproveitar conexões com o servidor.
     private final HttpClient httpClient;
 
     public DogApi() {
-        // Cria o cliente HTTP com configurações padrão do Java.
+        //cria o cliente HTTP
         this.httpClient = HttpClient.newHttpClient();
     }
 
     public String getImage(String breed) {
         try {
-            // Monta a URL final substituindo o %s pelo nome da raça em minúsculo.
+            //monta a URL final substituindo o %s pelo nome da raça em minúsculo.
             String url = String.format(BASE_URL_IMAGE, breed.toLowerCase());
 
             // Prepara a requisição HTTP do tipo GET apontando para essa URL.
@@ -39,48 +39,48 @@ public class DogApi {
                     .GET()
                     .build();
 
-            // Executa a requisição e guarda a resposta como texto.
+            //executa a requisição e guarda a resposta em String
             HttpResponse<String> response = httpClient.send(
                     request,
                     HttpResponse.BodyHandlers.ofString()
             );
 
-            // Procura o campo "message" dentro do JSON devolvido pela API.
+            //Procura o campo "message" dentro do JSON devolvido pela API.
             Pattern pattern = Pattern.compile("\"message\"\\s*:\\s*\"([^\"]+)\"");
+            //pattern = padrão de busca
             Matcher matcher = pattern.matcher(response.body());
+            //matcher aplica esse padrão
 
             // Se encontrou, devolve o conteúdo capturado entre as aspas.
             if (matcher.find()) {
                 return matcher.group(1);
             }
         } catch (IOException | InterruptedException e) {
-            // Se a thread foi interrompida, restaura o sinal para quem chamou.
+            //exception
             Thread.currentThread().interrupt();
-            // Exibe o erro no console para depuração.
             e.printStackTrace();
+            //objeto e(interrupção) exibe o erro no console
         }
-        // Se algo falhou, devolve string vazia em vez de quebrar o fluxo.
         return "";
     }
 
     public Map<String, List<String>> allBreeds() {
-        // Mapa que vai guardar cada raça e sua lista de sub-raças.
+        //map que vai guardar todas as raças e sua lista de sub-raças.
         Map<String, List<String>> result = new HashMap<>();
 
         try {
-            // Prepara a requisição GET para a URL que lista todas as raças.
+          
+          //instancia a request com a requisição GET, utilizando o builder para criar a URL base das raças.
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL_BREEDS))
                     .GET()
                     .build();
-
-            // Envia a requisição e recebe o corpo da resposta como texto.
             HttpResponse<String> response = httpClient.send(
                     request,
                     HttpResponse.BodyHandlers.ofString()
             );
 
-            // Captura todo o bloco que está entre as chaves do campo "message".
+            //captura todo o bloco que está entre as chaves do campo "message".
             Pattern messagePattern = Pattern.compile(
                     "\"message\"\\s*:\\s*\\{(.*?)\\}\\s*\\}",
                     Pattern.DOTALL
@@ -92,19 +92,16 @@ public class DogApi {
                 return result;
             }
 
-            // Pega só o conteúdo interno das chaves, sem o "message": { } externo.
+            // Pega só o conteúdo interno das chaves, sem o "message"
             String bloco = messageMatcher.group(1);
-
-            // Para cada entrada no formato "nome":[...] extrai o nome e o array.
+            //formato nome e aplica esse formato no bloco
             Pattern entryPattern = Pattern.compile("\"([^\"]+)\"\\s*:\\s*\\[([^\\]]*)\\]");
             Matcher entryMatcher = entryPattern.matcher(bloco);
 
             while (entryMatcher.find()) {
-                // Nome da raça principal.
+                //enquanto achar o formato certo, insere as raças e subraças em grupos.
                 String breed = entryMatcher.group(1);
-                // Conteúdo de dentro dos colchetes (as sub-raças).
                 String inner = entryMatcher.group(2).trim();
-
                 // Lista que vai guardar as sub-raças encontradas.
                 List<String> subs = new ArrayList<>();
 
@@ -117,7 +114,7 @@ public class DogApi {
                     }
                 }
 
-                // Guarda no mapa a raça e sua lista de sub-raças.
+                //guarda no mapa a raça e sua lista de sub-raças.
                 result.put(breed, subs);
             }
 

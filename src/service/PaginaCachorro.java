@@ -17,14 +17,12 @@ public class PaginaCachorro {
             return "";
         }
 
-        // Troca os espaços por hífen 
         String nomeBreed = nomeCachorro.replace(' ', '-');
-
-        // Divide o nome em palavras 
         String[] breedArr = nomeCachorro.split(" ");
-
+        
+        // Divide o nome em palavras 
+        String breed = breedArr.length > 1 ? breedArr[1] : breedArr[0]; 
         // Se tem mais de uma palavra, a raça principal é a última; senão, é a única.
-        String breed = breedArr.length > 1 ? breedArr[1] : breedArr[0];
 
         // Monta o HTML com o nome formatado e a URL da imagem.
         return "<div>" + ucfirst(nomeBreed) + "</div>" +
@@ -32,7 +30,7 @@ public class PaginaCachorro {
                "alt=\"dog\" class=\"imagem-cachorro\"></img>";
     }
 
-    // Deixa a primeira letra  em maiúscula.
+    //primeira letra em maiúscula.
     private String ucfirst(String texto) {
         if (texto == null || texto.isEmpty()) return texto;
         return Character.toUpperCase(texto.charAt(0)) + texto.substring(1);

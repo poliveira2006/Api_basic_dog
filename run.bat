@@ -1,10 +1,6 @@
 @echo off
 setlocal
-
-REM ============================================
-REM  Canil - runner
-REM  Compila se necessario e sobe o servidor
-REM ============================================
+REM .bat para tornar mais facil a execução e tests
 
 cd /d "%~dp0"
 

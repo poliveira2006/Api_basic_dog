@@ -1,4 +1,4 @@
-# Canil — Arquivo de Raças
+# Raças Caninas — Arquivo de Raças
 
 Aplicação web que consulta a [Dog CEO API](https://dog.ceo/dog-api/) e exibe
 um exemplar de cada raça cadastrada. Servidor HTTP em Java puro (sem frameworks),

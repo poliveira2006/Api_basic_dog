@@ -151,3 +151,4 @@ dependência externa além das fontes do Google.
   para uso local; para produção, trocar por um pool com `Executors`.
 - Sem cache entre requisições. Cada chamada a `/api/image` faz uma nova
   requisição à API externa.
+#Teste git
